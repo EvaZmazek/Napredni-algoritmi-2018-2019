@@ -1,0 +1,198 @@
+\documentclass[12pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}  % pravilno razpoznavanje unicode znakov
+
+\usepackage[slovene]{babel}  % slovenščina
+\usepackage[T1]{fontenc}     % naprednejše kodiranje fonta
+\usepackage{amsmath,amssymb,amsfonts,amsthm} % matematični paketi
+\usepackage[dvipsnames,usenames]{color} % barve
+\usepackage{graphicx}     % za slike
+\usepackage{emptypage}    % prazne strani so neoštevilčene, ampak so štete
+\usepackage{tikz}
+
+% oblika strani
+\usepackage[
+  top=3cm,
+  bottom=3cm,
+  inner=3.5cm,      % margini za dvostransko tiskanje
+  outer=2.5cm,
+  footskip=40pt     % pozicija številke strani
+]{geometry}
+
+% VEČ ZANIMIVIH PAKETOV
+% \usepackage{array}      % več možnosti za tabele
+% \usepackage[list=true,listformat=simple]{subcaption}  % več kot ena slika na figure, omogoči slika 1a, slika 1b
+% \usepackage[all]{xy}    % diagrami
+% \usepackage{doi}        % za clickable DOI entrye v bibliografiji
+% \usepackage{enumerate}     % več možnosti za sezname
+
+% Za barvanje source kode
+% \usepackage{minted}
+% \renewcommand\listingscaption{Program}
+
+% Za pisanje psevdokode
+% \usepackage{algpseudocode}  % za psevdokodo
+% \usepackage{algorithm}
+% \floatname{algorithm}{Algoritem}
+% \renewcommand{\listalgorithmname}{Kazalo algoritmov}
+
+% DRUGI TVOJI PAKETI:
+% tukaj
+
+\setlength{\overfullrule}{50pt} % označi predlogo vrstico
+\pagestyle{plain}               % samo številka strani na dnu, nobene glave / noge
+
+% ukazi za matematična okolja
+\theoremstyle{definition} % tekst napisan pokončno
+\newtheorem{definicija}{Definicija}[section]
+\newtheorem{primer}[definicija]{Primer}
+\newtheorem{opomba}[definicija]{Opomba}
+\newtheorem{aksiom}{Aksiom}
+
+\theoremstyle{plain} % tekst napisan poševno
+\newtheorem{lema}[definicija]{Lema}
+\newtheorem{izrek}[definicija]{Izrek}
+\newtheorem{trditev}[definicija]{Trditev}
+\newtheorem{posledica}[definicija]{Posledica}
+
+\numberwithin{equation}{section}  % števec za enačbe zgleda kot (2.7) in se resetira v vsakem poglavju
+
+% Matematični ukazi
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+%\renewcommand{\C}{\mathbb C}
+\newcommand{\Q}{\mathbb Q}
+
+% \DeclareMathOperator{\tr}{tr}  % morda potrebuješ operator za sled ali kaj drugega?
+
+% bold matematika znotraj \textbf{ }, tudi v naslovih, kot \omega spodaj
+%\makeatletter \g@addto@macro\bfseries{\boldmath} \makeatother
+%
+%% Poimenuj kazalo slik kot ``Kazalo slik'' in ne ``Slike''
+%\addto\captionsslovene{
+%  \renewcommand{\listfigurename}{Kazalo slik}%
+%}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%           DOCUMENT           %%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\thispagestyle{empty} % ampak na prvi strani ni številke
+
+
+
+\begin{titlepage}\centering
+\noindent{\large
+Univerza v Mariboru \\[1mm]
+Fakulteta za naravoslovje in matematiko\\[5mm]}
+\vspace*{\fill}
+{\LARGE Linearni problem prevoza} \\[1cm]
+\large Eva Zmazek
+\vspace*{\fill}
+\vfill
+\noindent{\large Maribor, 2019}
+\end{titlepage}
+
+\cleardoublepage
+
+
+\section{Opredelitev problema linearnega prevoza}
+
+\section{Problem linearnega prevoza}
+
+Iz skladišč želimo prepeljati večje količine izdelka na različne lokacije (trgovine). Imamo $n$ skladišč in $k$ trgovin. Skladišča imajo vsaka svojo zalogo izdelka, vsaka trgovina pa želi prejeti določeno količino izdelka. Za prevoz izdelka iz $i$-tega skladišča v $j$-to trgovino imamo v naprej določeno ceno prevoza. Izračunati je potrbno, kolikšen je minimalen strošek prevoza, če želimo izpolniti vse zahteve trgovin. Problem je \textbf{linearen}, če strošek prevoza iz skladišča v trgovino ni odvisen od količine, ko jo prevozimo, torej je cena prevoza na izdelek konstanta. \\
+
+Definirajmo:
+\begin{itemize}
+\item $sour(i)$ \dots \textbf{zaloga} izdelka v $i$-tem skladišču
+\item $dest(j)$ \dots \textbf{zahteva} $j$-te trgovine
+\item $cost(i,j)$ \dots \textbf{cena} prevoza enega izdelka iz $i$-tega skladišča v $j$-to trgovino
+\item $x_{i,j}$ \dots \textbf{količina prevoženega izdelka} iz $i$-tega skladišča v $j$-to trgovino (pri konkretnem prevozu)
+\end{itemize}
+
+\noindent Glede na zgornje oznake lahko problem linearnega prevoza zapišemo kot:
+$$\min \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{k} cost(i,j) \cdot x_{i,j}$$
+
+\noindent Pri reševanju problema moramo upoštevati še naslednje pogoje:
+\begin{itemize}
+\item $\sum\limits_{j=1}^{k} x_{i,j} \leq sour(i);~ i=1,2,\dots,n$ \\ (iz $i$-tega skladišča ne moremo odpeljati večje kotličine, kot je zaloga skladišča)
+\item $\sum\limits_{i=1}^{n} x_{i,j} \geq dest(j);~ j=1,2,\dots,k$ \\ (v $j$-to trgovino moramo pripeljati najmanj zahtevano količino trgovine)
+\item $x_{i,j} \geq 0;~ i=1,2, \dots n ~ \text{in} ~ j=1,2, \dots, k$ \\
+(prevažamo vedno iz skladišča v trgovino in ne obratno)
+\end{itemize}
+
+\newpage
+\subsection{Uravnotežen problem linearnega prevoza}
+
+Če velja $\sum\limits_{i=1}^{k} sour(i) = \sum\limits_{j=1}^{n}$, pravimo da je problem linearnega prevoza \textbf{uravnotežen}. \\
+
+\noindent Posledično veljata tudi naslednji enakosti:
+\begin{itemize}
+\item $\sum\limits_{j=1}^{k} x_{i,j} = sour(i);~ i=1,2,\dots,n$ 
+\item $\sum\limits_{i=1}^{n} x_{i,j} = dest(j);~ j=1,2,\dots,k$
+\end{itemize}
+
+ \noindent Znotraj tega projekta bomo obravnavali samo uravnotežene problem linearnega prevoza.
+
+\subsection{Celoštevilski uravnotežen problem linearnega prevoza}
+
+Če za vsako skladišče $i$ velja, da je $sour(i)$ naravno število in za vsako trgovino $j$ velja, da je $dest(j)$ naravno število v uravnoteženem problemu linearnega prevoza, potem je tudi optimalna rešitev uravnoteženega problema linearnega prevoza celoštevilska (to pomeni, da so vrednosti $x_{i,j}$ naravna števila. Velja tudi, da je število pozitivnih (torej različnih od $0$) vrednosti $x_{i,j}$ največ $k+n-1$.
+
+\section{Klasični genetski algoritem}
+
+Da je algoritem klasični pomeni, da so kromosomi pradstavljeni z dvojiškim zapisom. To pomeni, da so možne rešitve predstavljene z vektorjem $$(v_1, v_2, v_3, \dots, v_p);~p=n \cdot k \text{,}$$ pri čemer je komponenta vektorja $v_i$  dvojišči vektor $$(w_0^i, w_1^i, \dots, w_s^i) \text{,}$$ ki predstavlja vrednost $x_{j,m}$ za $j= \lfloor \frac{i-1}{k+1} \rfloor$ in $m= (i-1) mod (k+1)$. \\
+
+\noindent Za vsako dopustno rešitev tega problema mora veljati:
+\begin{itemize}
+\item $v_q \geq 0$ za $q=1, 2, \dots, k \cdot n$,
+\item $\sum\limits_{i=c \cdot k + 1}^{c \cdot k + k} v_i = sour(c+1)$ za $c=0, 1, \dots, n-1$,
+\item $\sum\limits_{j=m, \text{ korak } k}^{k \cdot n} v_j = dest(m)$ za $m=1, 2, \dots, k$.
+\end{itemize}
+
+\subsection{Evaluation function}
+
+Evaluacijska funkcija tega problema je skupna cena prevoza, pri čemer so izpolnjeni vsi zgornji pogoji.
+
+$$eval((v_1, v_2, v_3, \dots, v_p)) = \sum\limits_{i=1}^{p} v_i \cdot cost(j,m),$$
+
+kjer je $j=\lfloor \frac{i-1}{k+1} \rfloor$ in $m=(i-1) mod(k+1)$.
+
+\subsection{Genetic operators}
+
+Mutacija in križanje za klasični genetični algoritem naletita na mnoge probleme, ki privedejo do ugotovitve, da ta implementacija ni najbolj primerna.
+
+\section{GEN1 - Izboljšava vektorske reprezentacije in \\ njena implementacija}
+
+V tem poglavju bomo opisali implementacijo prvega genetskega algoritma, ki ga bomo označevali z oznako $GEN1$.
+
+\subsection{Inicializacija-inicialization}
+
+Če želimo dobiti začetno populacijjjo, moramo zgenerirati nekaj dopustnih rešitev, ki zadoščajo zgornjim pogojem. S funckijo $inicialization$. 
+
+\section{GEN-2}
+
+V tem algoritmu rešitve predstavljamo v obliki matrike, kar se zdi bolj naravno glede na problem.
+
+\noindent Za vsako dopustno rešitev tega problema mora veljati:
+\begin{itemize}
+\item $v_{i,j} \geq 0$ za $i=1, 2, \dots, k;~ j=1,2, \dots, n$,
+\item $\sum\limits_{i=1}^{k} v_{i,j} = dest(j)$ za $j=1, \dots, n$,
+\item $\sum\limits_{j=1}^{n} v_{i,j}= sour(i)$ za $i=1, \dots, k$.
+\end{itemize}
+
+\subsection{Evaluation function}
+
+$$eval(v_{i,j}) = \sum\limits_{i=1}^{k} \sum\limits_{j=1}^{n} v_{i,j} \cdot cost(i,j)$$
+
+\subsection{Genetic operators}
+
+\subsubsection{Mutation}
+
+
+
+\subsection{kscnj}
+
+\end{document}
