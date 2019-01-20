@@ -170,7 +170,13 @@ V tem poglavju bomo opisali implementacijo prvega genetskega algoritma, ki ga bo
 
 \subsection{Inicializacija-inicialization}
 
-Če želimo dobiti začetno populacijjjo, moramo zgenerirati nekaj dopustnih rešitev, ki zadoščajo zgornjim pogojem. S funckijo $inicialization$. 
+Če želimo dobiti začetno populacijo, moramo zgenerirati nekaj dopustnih rešitev, ki zadoščajo zgornjim pogojem. S funckijo $inicialization$. 
+
+\noindent Rešitve podajamo v obliki permitacije, kjer permutacija določa zaporedje izbire celice v matriki, po kateres se potem izračuna inicializacija rešitve.
+
+\subsection{Genetic operators}
+
+Za konstrukcijo nove generacije uporabimo eno izmed možnosti inverzije (obrata), mutacije ali križanja. Inverzija permutacijo, ki predstavlja rešitev samo obrne (torej izbiramo v obratnem vrstnem redu, mutacije zamenja dva elementa permutacije, križanje pa izbere del prvega starša (prve permutacije) ter preostali del zapolni z mankajočimi elementi v zaporedju, kot ga določa drugi starš (druga permutacija).
 
 \section{GEN-2}
 
@@ -191,8 +197,5 @@ $$eval(v_{i,j}) = \sum\limits_{i=1}^{k} \sum\limits_{j=1}^{n} v_{i,j} \cdot cost
 
 \subsubsection{Mutation}
 
-
-
-\subsection{kscnj}
 
 \end{document}

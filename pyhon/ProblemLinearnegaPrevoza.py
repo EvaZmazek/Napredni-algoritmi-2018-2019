@@ -49,24 +49,21 @@ def testni_primer_iz_knjige_map():
 
 testni_primer_iz_knjige_sour = np.array([15, 25, 5])
 testni_primer_iz_knjige_dest = np.array([5,15,14,10])
-print(testni_primer_iz_knjige_map())
+##print(testni_primer_iz_knjige_map())
+
 
 ###################################################################################################
-##### 2. DEL - PRIPRAVA POPULACIJE ######
-###################################################################################################
-
-def create_starting_population(size, the_map):
-    #this just creates a population of different routes of a fixed size.  Pretty straightforward.
-    population = []
-    
-    #for i in range(0,size):
-        #population.append(initialization(the_map))
-    return population
-
-###################################################################################################
-##### GEN1 ######
+##### 2. DEL - PRIPRAVA ZAČETNE POPULACIJE ######
 ###################################################################################################
 def initialization_GEN1(sour,dest):
+    n = len(sour)
+    k = len(dest)
+    
+    p = random.sample(list(range(n*k)),n*k)
+
+    return p
+
+def initialization_GEN2(sour,dest):
     # funcija initialization
 
     n = len(sour)
@@ -74,25 +71,52 @@ def initialization_GEN1(sour,dest):
 
     v = np.zeros((n,k))
     
-    transport = np.zeros((1, n*k), dtype=int)
     not_visited = list(range(1,k*n+1))
+
+    sour_copy = copy.deepcopy(sour)
+    dest_copy = copy.deepcopy(dest)
 
     while len(not_visited) > 0:
         q = random.choice(not_visited) #izbere naključnega izmed not_visited q
         not_visited.remove(q)
         i = (q-1)//k + 1 #opomba - floor((q-1)/k+1)=floor((q-1)/k)+1
         j = (q-1)%k + 1
-        val = min(sour[i-1], dest[j-1])
+        val = min(sour_copy[i-1], dest_copy[j-1])
         v[i-1][j-1] = val
-        sour[i-1] -= val
-        dest[j-1] -= val
+        sour_copy[i-1] -= val
+        dest_copy[j-1] -= val
     return v
 
-v1 = initialization_GEN1([1,2,3,5], [4,3,4])
-v2 = initialization_GEN1([1,2,3,5], [4,3,4])
-print(initialization_GEN1([15,25,5], [5,15,15,10]))
+v1 = initialization_GEN2([1,2,3,5], [4,3,4])
+v2 = initialization_GEN2([1,2,3,5], [4,3,4])
+print(initialization_GEN2([15,25,5], [5,15,15,10]))
 
-def evaluation_GEN1(v,cost):
+
+
+def create_starting_population_GEN1(size, sour, dest):
+    population = []
+
+    for i in range(0,size):
+        population.append(initialization_GEN1(sour,dest))
+    return population
+
+population_starting_GEN1 = create_starting_population_GEN1(5,[1,2,3], [3,2,1])
+print("starting population GEN1: " + str(population_starting_GEN1))
+
+def create_starting_population_GEN2(size, sour, dest):
+    population = []
+    
+    for i in range(0,size):
+        population.append(initialization_GEN2(sour,dest))
+    return population
+
+population_starting_GEN2 = create_starting_population_GEN2(5,[1,2,3], [3,2,1])
+print("starting population GEN2: " + str(population_starting_GEN2))
+
+###################################################################################################
+##### GEN1 ######
+###################################################################################################
+def evaluation_GEN2(v,cost):
     # izracuna ceno celotnega prevoza glede na podan nacrt prevoza v in ceno cost
     n = v.shape[0]
     k = v.shape[1]
@@ -102,8 +126,30 @@ def evaluation_GEN1(v,cost):
             transport_cost += (v[i][j])*(cost[i][j])
     return transport_cost
 
-print(evaluation_GEN1(v1, initialize_map(4,3)))
+def evaluation_GEN1(p,cost,sour,dest):
+    n = len(sour)
+    k = len(dest)
 
+    all_cost = 0
+    sour_copy = copy.deepcopy(sour)
+    dest_copy = copy.deepcopy(dest)
+
+    v = np.zeros((n,k)) #za test
+
+    for indeks in range(n*k):
+        q = p[indeks]
+        i = (q-1)//k + 1 #opomba - floor((q-1)/k+1)=floor((q-1)/k)+1
+        j = (q-1)%k + 1
+        val = min(sour_copy[i-1], dest_copy[j-1])
+        v[i-1][j-1] = val #za test
+        sour_copy[i-1] -= val
+        dest_copy[j-1] -= val
+        all_cost = all_cost + val*cost[i-1][j-1]
+##    print("test v: " + str(v))
+##    print("test cost: " + str(cost))
+    return all_cost
+    
+print(evaluation_GEN1([1,2,3,4,7,9,5,8,6],initialize_map(3,3),[1,2,3], [3,2,1]))
 
 ###################################################################################################
 ##### 3. DEL - GENETIC OPERATORS ######
@@ -111,7 +157,7 @@ print(evaluation_GEN1(v1, initialize_map(4,3)))
 
 def inversion_GEN1(vektor):
     #za podan seznam vector vrne njegovo obrnjeno razlicico
-    return reversed(vektor)
+    return list(reversed(vektor))
 
 def mutation_GEN1(vektor):
     #za podan seznam vector vrne isti vektor, ki ima zamenjani dve vrednosti
@@ -126,7 +172,7 @@ def mutation_GEN1(vektor):
 def crossover_GEN1(vektor1, vektor2):
     q = len(vektor1)
     [indeks1,indeks2] = random.sample(range(q+1),2)
-    print(indeks1, indeks2)
+##    print(indeks1, indeks2)
     if indeks1 > indeks2:
         indeks1, indeks2 = indeks2, indeks1
     part2 = vektor1[indeks1:indeks2]
@@ -148,9 +194,6 @@ def crossover_GEN1(vektor1, vektor2):
 ###################################################################################################
 ##### GEN2 ######
 ###################################################################################################
-
-def evaluation_GEN2(v,cost):
-    return evaluation_GEN1(v,cost)
 
 ###################################################################################################
 ##### 3. DEL - GENETIC OPERATORS ######
@@ -229,17 +272,117 @@ def crossover_GEN2(v1, v2):
                 V4[i][j] = div[i][j]
     return V3, V4
 
-print("v1")
-print(v1)
-print("v2")
-print(v2)
+##print("v1")
+##print(v1)
+##print("v2")
+##print(v2)
+##
+##V3,V4 = crossover_GEN2(v1,v2)
+##print(V4)
+##print(V3)
 
-V3,V4 = crossover_GEN2(v1,v2)
-print(V4)
-print(V3)
+###################################################################################################
+##### 4. DEL - CENE PREVOZOV ######
+###################################################################################################
+def cene_prevozov_GEN1(population, cost, sour, dest):
+    cene = []
+    for i in range(len(population)):
+        cene += [evaluation_GEN1(population[i],cost,sour,dest)]
+    return cene
 
+print(cene_prevozov_GEN1(population_starting_GEN1, initialize_map(3,3),[1,2,3], [3,2,1]))
 
+def cene_prevozov_GEN2(population, cost):
+    cene = []
+    for i in range(len(population)):
+        cene += [evaluation_GEN2(population[i],cost)]
+    return cene
 
+cost_starting_population_GEN2 = initialize_map(3,3)
+print(cost_starting_population_GEN2)
+print(cene_prevozov_GEN2(population_starting_GEN2, cost_starting_population_GEN2))
+
+###################################################################################################
+##### 5. DEL - SELECT MEMBER (RWS-priblizno) ######
+###################################################################################################
+
+def select_person_GEN1(population, cost,sour,dest,T_max):
+    size = len(population)
+    vse_cene = cene_prevozov_GEN1(population,cost,sour,dest)
+    S = sum(vse_cene)
+
+    selected = False
+    t = 0
+    
+    while ((not selected) and (t < T_max)):
+        t +=1
+        random_index = random.choice(range(size))
+        p_mogoce_izbrani = population[random_index]
+        verjetnost_da_izbrani = (vse_cene[random_index])/S
+        r = random.random()
+        if r > verjetnost_da_izbrani:
+            return p_mogoce_izbrani
+    return population[random.choice(range(size))]
+
+print()
+print("test za select_person_GEN1")
+print("...")
+print(population_starting_GEN1)
+costtestni1 = initialize_map(3,3)
+print(cene_prevozov_GEN1(population_starting_GEN1,costtestni1,[1,2,3],[3,2,1]))
+print(select_person_GEN1(population_starting_GEN1,costtestni1,[1,2,3],[3,2,1],5))
+print()
+
+    
+
+def main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population, number_of_couples, survive_next_generation):
+
+    population = create_starting_population_GEN1(size, sour, dest)
+    vse_cene = cene_prevozov_GEN1(population,cost,sour,dest)
+    cena_najcenejsa = vse_cene[np.argmin(vse_cene)]
+    best = cena_najcenejsa
+    print(cena_najcenejsa)
+    
+    for i in range(t_max):
+        print("t=" + str(i))
+        new_population = []
+        
+        if best != cena_najcenejsa:
+            print("Iteration %i: Best so far is cost %i" % (i, best))
+            cena_najcenejsa = best
+
+        #naredi otroke
+        for j in range(number_of_couples):
+            parent_1 = select_person_GEN1(population,cost,sour,dest,T_max)
+            parent_2 = select_person_GEN1(population,cost,sour,dest,T_max)
+            child_1 = crossover_GEN1(parent_1,parent_2)
+            child_2 = crossover_GEN1(parent_2,parent_1)
+            new_population += [child_1, child_2]
+        #mutriaj
+        for j in range(len(new_population)):
+            if random.random() < p_mut:
+                person = new_population[j]
+                new_population[j] = mutation_GEN1(person)
+        #inverz
+        for j in range(len(new_population)):
+            if random.random() < p_inv:
+                person = new_population[j]
+                new_population[j] = inversion_GEN1(person)
+        #ohranimo del generacije
+        new_population += [population[np.argmin(vse_cene)]]
+        for j in range(1, survive_next_generation):
+            #keeper = population[np.argsort(vse_cene)[j]]
+            keeper = select_person_GEN1(population,cost,sour,dest,T_max)
+            new_population += [keeper]
+        #dodaj preostanek
+        while len(new_population) < size:
+            new_population += [initialization_GEN1(sour,dest)]
+        population = copy.deepcopy(new_population)
+
+        vse_cene = cene_prevozov_GEN1(population,cost,sour,dest)
+        print(vse_cene)
+        best = vse_cene[np.argmin(vse_cene)]
+    return cena_najcenejsa, population[np.argmin(vse_cene)]
 
 
 ###### PRINT POP ######
@@ -247,19 +390,8 @@ def print_pop(population):
     for i in population:
         print(i)
 
-##### FITNESS #####
-##def fitness(route, the_map):
-##    
-##    score = 0
-##    
-##    for i in range(1, len(route)):
-##        if (the_map[route[i-1]][route[i]] == 0) and i != len(the_map)-1:
-##            print("WARNING: INVALID ROUTE")
-##            print(route)
-##            print(the_map)
-##        score = score + the_map[route[i-1]][route[i]]
-##
-##    return score
+        
+print(main_GEN1(5,[[1,2,3,4],[5,6,7,8],[9,8,20,6],[30,8,9,5]],[17,5,23,15],[15,23,17,5],20,8, 0.5, 0.1,population_starting_GEN1,1,2))
 
 
 
