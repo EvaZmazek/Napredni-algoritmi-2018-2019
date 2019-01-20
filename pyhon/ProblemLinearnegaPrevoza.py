@@ -306,9 +306,12 @@ print(cene_prevozov_GEN2(population_starting_GEN2, cost_starting_population_GEN2
 ##### 5. DEL - SELECT MEMBER (RWS-priblizno) ######
 ###################################################################################################
 
-def select_person_GEN1(population, cost,sour,dest,T_max):
+def select_person(population, cost,sour,dest,T_max,GEN):
     size = len(population)
-    vse_cene = cene_prevozov_GEN1(population,cost,sour,dest)
+    if GEN == 1:
+        vse_cene = cene_prevozov_GEN1(population,cost,sour,dest)
+    if GEN == 2:
+        vse_cene = cene_prevozov_GEN2(population,cost)
     S = sum(vse_cene)
 
     selected = False
@@ -320,7 +323,7 @@ def select_person_GEN1(population, cost,sour,dest,T_max):
         p_mogoce_izbrani = population[random_index]
         verjetnost_da_izbrani = (vse_cene[random_index])/S
         r = random.random()
-        if r > verjetnost_da_izbrani:
+        if r > verjetnost_da_izbrani: #vecja, kot bo cena, manjsa je verjetnost, da bo izbran
             return p_mogoce_izbrani
     return population[random.choice(range(size))]
 
@@ -330,7 +333,7 @@ print("...")
 print(population_starting_GEN1)
 costtestni1 = initialize_map(3,3)
 print(cene_prevozov_GEN1(population_starting_GEN1,costtestni1,[1,2,3],[3,2,1]))
-print(select_person_GEN1(population_starting_GEN1,costtestni1,[1,2,3],[3,2,1],5))
+print(select_person(population_starting_GEN1,costtestni1,[1,2,3],[3,2,1],5,1))
 print()
 
     
@@ -353,8 +356,8 @@ def main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population, num
 
         #naredi otroke
         for j in range(number_of_couples):
-            parent_1 = select_person_GEN1(population,cost,sour,dest,T_max)
-            parent_2 = select_person_GEN1(population,cost,sour,dest,T_max)
+            parent_1 = select_person(population,cost,sour,dest,T_max,1)
+            parent_2 = select_person(population,cost,sour,dest,T_max,1)
             child_1 = crossover_GEN1(parent_1,parent_2)
             child_2 = crossover_GEN1(parent_2,parent_1)
             new_population += [child_1, child_2]
@@ -372,7 +375,7 @@ def main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population, num
         new_population += [population[np.argmin(vse_cene)]]
         for j in range(1, survive_next_generation):
             #keeper = population[np.argsort(vse_cene)[j]]
-            keeper = select_person_GEN1(population,cost,sour,dest,T_max)
+            keeper = select_person(population,cost,sour,dest,T_max,1)
             new_population += [keeper]
         #dodaj preostanek
         while len(new_population) < size:
@@ -384,14 +387,58 @@ def main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population, num
         best = vse_cene[np.argmin(vse_cene)]
     return cena_najcenejsa, population[np.argmin(vse_cene)]
 
+def main_GEN2(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population, number_of_couples, survive_next_generation):
+
+    population = create_starting_population_GEN2(size, sour, dest)
+    vse_cene = cene_prevozov_GEN2(population,cost)
+    cena_najcenejsa = vse_cene[np.argmin(vse_cene)]
+    best = cena_najcenejsa
+    print(cena_najcenejsa)
+    
+    for i in range(t_max):
+        print("t=" + str(i))
+        new_population = []
+        
+        if best != cena_najcenejsa:
+            print("Iteration %i: Best so far is cost %i" % (i, best))
+            cena_najcenejsa = best
+
+        #naredi otroke
+        for j in range(number_of_couples):
+            parent_1 = select_person(population,cost,sour,dest,T_max,2)
+            parent_2 = select_person(population,cost,sour,dest,T_max,2)
+            child_1, child_2 = crossover_GEN2(parent_1,parent_2)
+            new_population += [child_1, child_2]
+        #mutriaj
+        for j in range(len(new_population)):
+            if random.random() < p_mut:
+                person = new_population[j]
+                new_population[j] = mutation_GEN2(person)
+        #ohranimo del generacije
+        new_population += [population[np.argmin(vse_cene)]]
+        for j in range(1, survive_next_generation):
+            #keeper = population[np.argsort(vse_cene)[j]]
+            keeper = select_person(population,cost,sour,dest,T_max,2)
+            new_population += [keeper]
+        #dodaj preostanek
+        while len(new_population) < size:
+            new_population += [initialization_GEN2(sour,dest)]
+        population = copy.deepcopy(new_population)
+
+        vse_cene = cene_prevozov_GEN2(population,cost)
+        print(vse_cene)
+        best = vse_cene[np.argmin(vse_cene)]
+    return cena_najcenejsa, population[np.argmin(vse_cene)]
+
 
 ###### PRINT POP ######
 def print_pop(population):
     for i in population:
         print(i)
 
-        
-print(main_GEN1(5,[[1,2,3,4],[5,6,7,8],[9,8,20,6],[30,8,9,5]],[17,5,23,15],[15,23,17,5],20,8, 0.5, 0.1,population_starting_GEN1,1,2))
+
+#kot izgleda, je tu 355 kar optimalna rešitev - v večini primerov ziteriram do tega
+print(main_GEN1(6,[[1,2,3,4],[5,6,7,8],[9,8,20,6],[30,8,9,5]],[17,5,23,15],[15,23,17,5],20,8, 0.5, 0.1,population_starting_GEN1,1,2))
 
 
 
