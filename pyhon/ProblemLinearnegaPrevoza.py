@@ -89,7 +89,7 @@ def initialization_GEN2(sour,dest):
 
 v1 = initialization_GEN2([1,2,3,5], [4,3,4])
 v2 = initialization_GEN2([1,2,3,5], [4,3,4])
-print(initialization_GEN2([15,25,5], [5,15,15,10]))
+##print(initialization_GEN2([15,25,5], [5,15,15,10]))
 
 
 
@@ -101,7 +101,7 @@ def create_starting_population_GEN1(size, sour, dest):
     return population
 
 population_starting_GEN1 = create_starting_population_GEN1(5,[1,2,3], [3,2,1])
-print("starting population GEN1: " + str(population_starting_GEN1))
+##print("starting population GEN1: " + str(population_starting_GEN1))
 
 def create_starting_population_GEN2(size, sour, dest):
     population = []
@@ -111,7 +111,7 @@ def create_starting_population_GEN2(size, sour, dest):
     return population
 
 population_starting_GEN2 = create_starting_population_GEN2(5,[1,2,3], [3,2,1])
-print("starting population GEN2: " + str(population_starting_GEN2))
+##print("starting population GEN2: " + str(population_starting_GEN2))
 
 ###################################################################################################
 ##### GEN1 ######
@@ -149,7 +149,7 @@ def evaluation_GEN1(p,cost,sour,dest):
 ##    print("test cost: " + str(cost))
     return all_cost
     
-print(evaluation_GEN1([1,2,3,4,7,9,5,8,6],initialize_map(3,3),[1,2,3], [3,2,1]))
+##print(evaluation_GEN1([1,2,3,4,7,9,5,8,6],initialize_map(3,3),[1,2,3], [3,2,1]))
 
 ###################################################################################################
 ##### 3. DEL - GENETIC OPERATORS ######
@@ -213,9 +213,9 @@ def mutation_GEN2(v):
             v_ij = v[indeksiI[i],indeksiJ[j]]
             sourW[i] = sourW[i] + v_ij
             destW[j] = destW[j] + v_ij
-    print(sourW, destW)
+    ##print(sourW, destW)
     W = initialization_GEN2(sourW,destW) #pazi! od tu naprej se sourW in destW spremenita
-    print(W)
+    ##print(W)
     for i in range(p):
         for j in range(q):
             v[indeksiI[i]][indeksiJ[j]] = W[i][j]
@@ -291,7 +291,7 @@ def cene_prevozov_GEN1(population, cost, sour, dest):
         cene += [evaluation_GEN1(population[i],cost,sour,dest)]
     return cene
 
-print(cene_prevozov_GEN1(population_starting_GEN1, initialize_map(3,3),[1,2,3], [3,2,1]))
+##print(cene_prevozov_GEN1(population_starting_GEN1, initialize_map(3,3),[1,2,3], [3,2,1]))
 
 def cene_prevozov_GEN2(population, cost):
     cene = []
@@ -300,8 +300,8 @@ def cene_prevozov_GEN2(population, cost):
     return cene
 
 cost_starting_population_GEN2 = initialize_map(3,3)
-print(cost_starting_population_GEN2)
-print(cene_prevozov_GEN2(population_starting_GEN2, cost_starting_population_GEN2))
+##print(cost_starting_population_GEN2)
+##print(cene_prevozov_GEN2(population_starting_GEN2, cost_starting_population_GEN2))
 
 ###################################################################################################
 ##### 5. DEL - SELECT MEMBER (RWS-priblizno) ######
@@ -328,14 +328,14 @@ def select_person(population, cost,sour,dest,T_max,GEN):
             return p_mogoce_izbrani
     return population[random.choice(range(size))]
 
-print()
-print("test za select_person_GEN1")
-print("...")
-print(population_starting_GEN1)
-costtestni1 = initialize_map(3,3)
-print(cene_prevozov_GEN1(population_starting_GEN1,costtestni1,[1,2,3],[3,2,1]))
-print(select_person(population_starting_GEN1,costtestni1,[1,2,3],[3,2,1],5,1))
-print()
+##print()
+##print("test za select_person_GEN1")
+##print("...")
+##print(population_starting_GEN1)
+##costtestni1 = initialize_map(3,3)
+##print(cene_prevozov_GEN1(population_starting_GEN1,costtestni1,[1,2,3],[3,2,1]))
+##print(select_person(population_starting_GEN1,costtestni1,[1,2,3],[3,2,1],5,1))
+##print()
 
     
 
@@ -346,13 +346,15 @@ def main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population, num
     cena_najcenejsa = vse_cene[np.argmin(vse_cene)]
     best = cena_najcenejsa
     print(cena_najcenejsa)
+
+    print("Starting iteration: Best so far is cost %i, winner is \n %s" % (best, str(population[np.argmin(vse_cene)])))
     
     for i in range(t_max):
-        print("t=" + str(i))
+        ##print("t=" + str(i))
         new_population = []
         
         if best != cena_najcenejsa:
-            print("Iteration %i: Best so far is cost %i" % (i, best))
+            print("Iteration %i: Best so far is cost %i, winner is \n %s" % (i, best, str(population[np.argmin(vse_cene)])))
             cena_najcenejsa = best
 
         #naredi otroke
@@ -384,7 +386,7 @@ def main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population, num
         population = copy.deepcopy(new_population)
 
         vse_cene = cene_prevozov_GEN1(population,cost,sour,dest)
-        print(vse_cene)
+        ##print(vse_cene)
         best = vse_cene[np.argmin(vse_cene)]
     return cena_najcenejsa, population[np.argmin(vse_cene)]
 
@@ -395,13 +397,15 @@ def main_GEN2(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population, num
     cena_najcenejsa = vse_cene[np.argmin(vse_cene)]
     best = cena_najcenejsa
     print(cena_najcenejsa)
+
+    print("Starting iteration: Best so far is cost %i, winner is \n %s" % (best, str(population[np.argmin(vse_cene)])))
     
     for i in range(t_max):
-        print("t=" + str(i))
+        ##print("t=" + str(i))
         new_population = []
         
         if best != cena_najcenejsa:
-            print("Iteration %i: Best so far is cost %i" % (i, best))
+            print("Iteration %i: Best so far is cost %i, winner is \n %s" % (i, best, str(population[np.argmin(vse_cene)])))
             cena_najcenejsa = best
 
         #naredi otroke
@@ -427,7 +431,7 @@ def main_GEN2(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population, num
         population = copy.deepcopy(new_population)
 
         vse_cene = cene_prevozov_GEN2(population,cost)
-        print(vse_cene)
+        ##print(vse_cene)
         best = vse_cene[np.argmin(vse_cene)]
     return cena_najcenejsa, population[np.argmin(vse_cene)]
 
@@ -439,17 +443,6 @@ def print_pop(population):
 
 
 #kot izgleda, je tu 355 kar optimalna rešitev - v večini primerov ziteriram do tega
-print(main_GEN1(6,[[1,2,3,4],[5,6,7,8],[9,8,20,6],[30,8,9,5]],[17,5,23,15],[15,23,17,5],20,8, 0.5, 0.1,population_starting_GEN1,1,2))
-print()
-print()
-print()
-print()
-print()
-print()
-print()
-print()
-print()
-print(main_GEN2(6,[[1,2,3,4],[5,6,7,8],[9,8,20,6],[30,8,9,5]],[17,5,23,15],[15,23,17,5],20,8, 0.5, 0.1,population_starting_GEN2,1,2))
-
-
+##print(main_GEN1(6,[[1,2,3,4],[5,6,7,8],[9,8,20,6],[30,8,9,5]],[17,5,23,15],[15,23,17,5],20,8, 0.5, 0.1,population_starting_GEN1,1,2))
+##print(main_GEN2(6,[[1,2,3,4],[5,6,7,8],[9,8,20,6],[30,8,9,5]],[17,5,23,15],[15,23,17,5],20,8, 0.5, 0.1,population_starting_GEN2,1,2))
 
