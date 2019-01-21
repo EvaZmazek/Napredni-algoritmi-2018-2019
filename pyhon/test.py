@@ -196,7 +196,7 @@ def test8():
     p_inv = 0.1
     old_population_GEN1 = create_starting_population_GEN1(size, sour, dest)
     old_population_GEN2 = create_starting_population_GEN2(size, sour, dest)
-    number_of_couples = 1
+    number_of_couples = 3
     survive_next_generation = 5
     costGEN1, winnerGEN1 = main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population_GEN1, number_of_couples, survive_next_generation)
     costGEN2, winnerGEN2 = main_GEN2(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population_GEN2, number_of_couples, survive_next_generation)
@@ -215,53 +215,4 @@ destrempol = [1,1,1,1,1]
 rem1 = np.zeros((4,5))
 rem2 = np.zeros((4,5))
 
-def najdi_enko(matrika):
-    n = matrika.shape[0]
-    k = matrika.shape[1]
-    for i in range(n):
-        for j in range(k):
-            if matrika[i][j] == 1:
-                return i,j
-    return False
 
-
-def razdeli_rem(rem, rem1, rem2,sourrempol,destrempol):
-    print("sum od rem" + str(sum(sum(rem))))
-    sourrem1 = np.sum(rem1, axis = 1)
-    destrem1 = np.sum(rem1, axis = 0)
-    #print("rem1:" + str(rem1) + "     rem2:" + str(rem2))
-    if sum(sum(rem)) == 0:
-        if np.array_equal(sourrem1,sourrempol) and np.array_equal(destrem1,destrempol):
-            return rem1, rem2
-        else:
-            return False
-    else:
-        i,j = najdi_enko(rem)
-        rem[i][j] = 0
-        if (sourrem1[i] < sourrempol[i]) and (destrem1[j] < destrempol[j]):
-            print("USPELO" + str(sourrem1) + "\n" + str(rem1) + "\n" + str(rem2))
-            rem_copy = copy.deepcopy(rem)
-            rem1_copy = copy.deepcopy(rem1)
-            rem2_copy = copy.deepcopy(rem2)
-            rem1_copy[i][j] = 1
-            a = razdeli_rem(rem_copy,rem1_copy,rem2_copy,sourrempol,destrempol)
-            if a != False:
-                return a
-            else:
-                rem_copy2 = copy.deepcopy(rem)
-                rem1_copy2 = copy.deepcopy(rem1)
-                rem2_copy2 = copy.deepcopy(rem2)
-                #rem1_copy2[i][j] = 0
-                rem2_copy2[i][j] = 1
-                return razdeli_rem(rem_copy2,rem1_copy2,rem2_copy2,sourrempol,destrempol)
-        else:
-            rem_copy3 = copy.deepcopy(rem)
-            rem1_copy3 = copy.deepcopy(rem1)
-            rem2_copy3 = copy.deepcopy(rem2)
-            #rem1_copy3[i][j] = 0
-            rem2_copy3[i][j] = 1
-            return razdeli_rem(rem_copy3,rem1_copy3,rem2_copy3,sourrempol,destrempol)
-            
-            
-
-#print(razdeli_rem(REM, rem1, rem2,sourrempol,destrempol))

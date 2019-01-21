@@ -220,6 +220,53 @@ def mutation_GEN2(v):
             v[indeksiI[i]][indeksiJ[j]] = W[i][j]
     return v
 
+def najdi_enko(matrika):
+    n = matrika.shape[0]
+    k = matrika.shape[1]
+    for i in range(n):
+        for j in range(k):
+            if matrika[i][j] == 1:
+                return i,j
+    return False
+
+
+def razdeli_rem(rem, rem1, rem2,sourrempol,destrempol):
+    #print("sum od rem" + str(sum(sum(rem))))
+    sourrem1 = np.sum(rem1, axis = 1)
+    destrem1 = np.sum(rem1, axis = 0)
+    #print("rem1:" + str(rem1) + "     rem2:" + str(rem2))
+    if sum(sum(rem)) == 0:
+        if np.array_equal(sourrem1,sourrempol) and np.array_equal(destrem1,destrempol):
+            return rem1, rem2
+        else:
+            return False
+    else:
+        i,j = najdi_enko(rem)
+        rem[i][j] = 0
+        if (sourrem1[i] < sourrempol[i]) and (destrem1[j] < destrempol[j]):
+            #print("USPELO" + str(sourrem1) + "\n" + str(rem1) + "\n" + str(rem2))
+            rem_copy = copy.deepcopy(rem)
+            rem1_copy = copy.deepcopy(rem1)
+            rem2_copy = copy.deepcopy(rem2)
+            rem1_copy[i][j] = 1
+            a = razdeli_rem(rem_copy,rem1_copy,rem2_copy,sourrempol,destrempol)
+            if a != False:
+                return a
+            else:
+                rem_copy2 = copy.deepcopy(rem)
+                rem1_copy2 = copy.deepcopy(rem1)
+                rem2_copy2 = copy.deepcopy(rem2)
+                #rem1_copy2[i][j] = 0
+                rem2_copy2[i][j] = 1
+                return razdeli_rem(rem_copy2,rem1_copy2,rem2_copy2,sourrempol,destrempol)
+        else:
+            rem_copy3 = copy.deepcopy(rem)
+            rem1_copy3 = copy.deepcopy(rem1)
+            rem2_copy3 = copy.deepcopy(rem2)
+            #rem1_copy3[i][j] = 0
+            rem2_copy3[i][j] = 1
+            return razdeli_rem(rem_copy3,rem1_copy3,rem2_copy3,sourrempol,destrempol)
+
 def crossover_GEN2(v1, v2):
     n = v1.shape[0]
     k = v1.shape[1]
@@ -278,22 +325,30 @@ def crossover_GEN2(v1, v2):
     for j in range(k):
         destrempol[j] = destrem[j]/2
         
-    sourrempol_copy = copy.deepcopy(sourrempol)
-    destrempol_copy = copy.deepcopy(destrempol)
-
-    R1 = np.zeros((n,k)) #za test
-
-    for q in range(n*k):
-        i = (q-1)//k + 1 #opomba - floor((q-1)/k+1)=floor((q-1)/k)+1
-        j = (q-1)%k + 1
-        if rem[i-1][j-1] == 1:
-            val = min(1,sourrempol_copy[i-1], destrempol_copy[j-1] )
-        else:
-            val = 0
-        R1[i-1][j-1] = val #za test
-        sourrempol_copy[i-1] -= val
-        destrempol_copy[j-1] -= val
+##    sourrempol_copy = copy.deepcopy(sourrempol)
+##    destrempol_copy = copy.deepcopy(destrempol)
+##
+##    R1 = np.zeros((n,k)) #za test
+##
+##    for q in range(n*k):
+##        i = (q-1)//k + 1 #opomba - floor((q-1)/k+1)=floor((q-1)/k)+1
+##        j = (q-1)%k + 1
+##        if rem[i-1][j-1] == 1:
+##            val = min(1,sourrempol_copy[i-1], destrempol_copy[j-1] )
+##        else:
+##            val = 0
+##        R1[i-1][j-1] = val #za test
+##        sourrempol_copy[i-1] -= val
+##        destrempol_copy[j-1] -= val
+    rem1, rem2 = razdeli_rem(rem, rem1, rem2,sourrempol,destrempol)
+    for i in range(n):
+        for j in range(k):
+            V3[i][j] = div[i][j] + rem1[i][j]
+            V4[i][j] = div[i][j] + rem2[i][j]
     return V3, V4
+
+#print(razdeli_rem(REM, rem1, rem2,sourrempol,destrempol))
+
 
 ##print("v1")
 ##print(v1)
