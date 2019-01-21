@@ -442,7 +442,6 @@ def print_pop(population):
         print(i)
 
 
-#kot izgleda, je tu 355 kar optimalna rešitev - v večini primerov ziteriram do tega
+
 ##print(main_GEN1(6,[[1,2,3,4],[5,6,7,8],[9,8,20,6],[30,8,9,5]],[17,5,23,15],[15,23,17,5],20,8, 0.5, 0.1,population_starting_GEN1,1,2))
 ##print(main_GEN2(6,[[1,2,3,4],[5,6,7,8],[9,8,20,6],[30,8,9,5]],[17,5,23,15],[15,23,17,5],20,8, 0.5, 0.1,population_starting_GEN2,1,2))
-
