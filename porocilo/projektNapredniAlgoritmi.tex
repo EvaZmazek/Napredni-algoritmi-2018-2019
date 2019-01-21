@@ -137,6 +137,26 @@ $$\min \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{k} cost(i,j) \cdot x_{i,j}$$
 
  \noindent Znotraj tega projekta bomo obravnavali samo uravnotežene problem linearnega prevoza.
 
+\subsection{Uprozoritveni problem}
+$sour = [1, 0, 0, 0, 3]$
+$dest = [3, 1, 0]$
+$$ cost = 
+\begin{tabular}{c c c c c | r}
+ 1 & 1 & 2 & 1 & 1 & 3\\
+ 3 & 2 & 4 & 1 & 1 & 1\\
+ 1 & 1 & 1 & 1 & 10& 0\\
+ \hline
+  1 & 0 & 0 & 0 & 3 & 4\\
+\end{tabular}
+$$
+$$ v =
+\begin{tabular}{c c c c c}
+ 1 & 0 & 0 & 0 & 2\\
+ 0 & 0 & 0 & 0 & 1\\
+ 0 & 0 & 0 & 0 & 0\\
+ \end{tabular}
+ $$
+ Celoten optimalen strošek je $4$.
 \subsection{Celoštevilski uravnotežen problem linearnega prevoza}
 
 Če za vsako skladišče $i$ velja, da je $sour(i)$ naravno število in za vsako trgovino $j$ velja, da je $dest(j)$ naravno število v uravnoteženem problemu linearnega prevoza, potem je tudi optimalna rešitev uravnoteženega problema linearnega prevoza celoštevilska (to pomeni, da so vrednosti $x_{i,j}$ naravna števila. Velja tudi, da je število pozitivnih (torej različnih od $0$) vrednosti $x_{i,j}$ največ $k+n-1$.

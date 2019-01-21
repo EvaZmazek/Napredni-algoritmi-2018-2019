@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.3.18)  20 JAN 2019 12:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.3.18)  21 JAN 2019 19:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -943,7 +943,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 130--131
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--147
+Underfull \hbox (badness 10000) in paragraph at lines 166--167
 
  []
 
@@ -951,11 +951,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 146--147
 Here is how much of TeX's memory you used:
  13996 strings out of 493014
  264784 string characters out of 6133351
- 315698 words of memory out of 5000000
+ 316698 words of memory out of 5000000
  17237 multiletter control sequences out of 15000+600000
  15215 words of font info for 41 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,6n,54p,710b,191s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,6n,54p,710b,192s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2016/texmf-di
 st/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2016/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2016/texmf-dist/
@@ -972,7 +972,7 @@ c/cm-super/sfrm0800.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/
 cm-super/sfrm1200.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/cm
 -super/sfrm1440.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/cm-s
 uper/sfrm2074.pfb>
-Output written on projektNapredniAlgoritmi.pdf (6 pages, 177734 bytes).
+Output written on projektNapredniAlgoritmi.pdf (6 pages, 180203 bytes).
 PDF statistics:
  83 PDF objects out of 1000 (max. 8388607)
  60 compressed objects within 1 object stream
