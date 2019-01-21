@@ -272,17 +272,14 @@ def crossover_GEN2(v1, v2):
     k = v1.shape[1]
     div = np.zeros((n,k))
     rem = np.zeros((n,k))
-    rem1 = np.zeros((n,k)) #samo zaradi preglednosti
-    rem2 = np.zeros((n,k)) #samo zaradi preglednosti
+    rem1 = np.zeros((n,k))
+    rem2 = np.zeros((n,k))
     V3 = np.zeros((n,k))
     V4 = np.zeros((n,k))
-##    sodo = True
     sourrem = np.zeros((n))
     destrem = np.zeros((k))
     sourrem1 = np.zeros((n))
     destrem1 = np.zeros((k))
-##    sourrem2 = np.zeros((n))
-##    destrem2 = np.zeros((k))
     for i in range(n):
         for j in range(k):
             div[i][j] = (v1[i][j] + v2[i][j])//2
@@ -291,55 +288,13 @@ def crossover_GEN2(v1, v2):
             if r==1:
                 sourrem[i] += 1
                 destrem[j] +=1
-##            #if rem[i][j] == 1:
-####            r = (v1[i][j] + v2[i][j])%2
-####            if r==1:
-####                if sodo:
-####                    rem1[i][j] = 1
-####                else:
-####                    rem2[i][j] = 1
-####                sodo = not sodo
-##    for i in range(n):
-##        for j in range(k):
-##            if rem[i][j] == 1:
-##                if (sourrem1[i] < sourrem[i]/2) and (destrem1[j] < destrem[j]/2):
-##                    rem1[i][j] = 1 #samo zaradi preglednosti
-##                    sourrem1[i] += 1
-##                    destrem1[j] += 1
-##                    V3[i][j] = div[i][j] + 1
-##                    V4[i][j] = div[i][j]
-##                else:
-##                    rem2[i][j] = 1 #samo zaradi preglednosti
-####                    sourrem2[i] += 1
-####                    destrem2[j] += 1
-##                    V3[i][j] = div[i][j]
-##                    V4[i][j] = div[i][j] + 1
-##            else:
-##                V3[i][j] = div[i][j]
-##                V4[i][j] = div[i][j]
-##    print(div,rem)
     sourrempol = np.zeros((n))
     destrempol = np.zeros((k))
     for i in range(n):
         sourrempol[i] = sourrem[i]/2
     for j in range(k):
         destrempol[j] = destrem[j]/2
-        
-##    sourrempol_copy = copy.deepcopy(sourrempol)
-##    destrempol_copy = copy.deepcopy(destrempol)
-##
-##    R1 = np.zeros((n,k)) #za test
-##
-##    for q in range(n*k):
-##        i = (q-1)//k + 1 #opomba - floor((q-1)/k+1)=floor((q-1)/k)+1
-##        j = (q-1)%k + 1
-##        if rem[i-1][j-1] == 1:
-##            val = min(1,sourrempol_copy[i-1], destrempol_copy[j-1] )
-##        else:
-##            val = 0
-##        R1[i-1][j-1] = val #za test
-##        sourrempol_copy[i-1] -= val
-##        destrempol_copy[j-1] -= val
+
     rem1, rem2 = razdeli_rem(rem, rem1, rem2,sourrempol,destrempol)
     for i in range(n):
         for j in range(k):

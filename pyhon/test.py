@@ -184,7 +184,7 @@ def test7():
 #print("--------------------------------  TEST 7   -------------------------")
 #print(test7())
 
-# priblizno 1065 - osnovna izracunana = 1265 http://www.maths.unp.ac.za/coursework/MATH331/2012/transportation_assignment.pdf table 6
+# priblizno 1040 - osnovna izracunana = 1265 http://www.maths.unp.ac.za/coursework/MATH331/2012/transportation_assignment.pdf table 6
 def test8():
     size = 8
     cost = [[10,30,25,15],[20,15,20,10], [10,30,20,20],[30,40,35,45]]
@@ -201,13 +201,52 @@ def test8():
     costGEN1, winnerGEN1 = main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population_GEN1, number_of_couples, survive_next_generation)
     costGEN2, winnerGEN2 = main_GEN2(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population_GEN2, number_of_couples, survive_next_generation)
     return costGEN1, winnerGEN1, costGEN2, winnerGEN2
-print("--------------------------------  TEST 8   -------------------------")
-print(test8())
+#print("--------------------------------  TEST 8   -------------------------")
+#print(test8())
 
+#1440   https://catalog.extension.oregonstate.edu/sites/catalog/files/project/pdf/em8779.pdf
+def test9():
+    size = 8
+    cost = [[8,15,50],[10,17,20], [30,26,15]]
+    sour = [20,30,45]
+    dest = [30,35,30]
+    t_max = 30
+    T_max = 10
+    p_mut = 0.5
+    p_inv = 0.1
+    old_population_GEN1 = create_starting_population_GEN1(size, sour, dest)
+    old_population_GEN2 = create_starting_population_GEN2(size, sour, dest)
+    number_of_couples = 2
+    survive_next_generation = 5
+    costGEN1, winnerGEN1 = main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population_GEN1, number_of_couples, survive_next_generation)
+    costGEN2, winnerGEN2 = main_GEN2(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population_GEN2, number_of_couples, survive_next_generation)
+    return costGEN1, winnerGEN1, costGEN2, winnerGEN2
+#print("--------------------------------  TEST 9   -------------------------")
+#print(test9())
 
-v_1 = np.array([[1,0,0,7,0],[0,4,0,0,0],[2,1,4,0,5],[0,0,6,0,0]])
-v_2 = np.array([[0,0,5,0,3],[0,4,0,0,0],[0,0,5,7,0],[3,1,0,0,2]])
-print(crossover_GEN2(v_1, v_2))
+#4250   https://catalog.extension.oregonstate.edu/sites/catalog/files/project/pdf/em8779.pdf
+def test10():
+    size = 8
+    cost = [[90,100,130],[100,140,100], [100,80,80]]
+    sour = [20,15,10]
+    dest = [5,20,20]
+    t_max = 30
+    T_max = 10
+    p_mut = 0.5
+    p_inv = 0.1
+    old_population_GEN1 = create_starting_population_GEN1(size, sour, dest)
+    old_population_GEN2 = create_starting_population_GEN2(size, sour, dest)
+    number_of_couples = 2
+    survive_next_generation = 5
+    costGEN1, winnerGEN1 = main_GEN1(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population_GEN1, number_of_couples, survive_next_generation)
+    costGEN2, winnerGEN2 = main_GEN2(size,cost,sour,dest,t_max,T_max, p_mut, p_inv, old_population_GEN2, number_of_couples, survive_next_generation)
+    return costGEN1, winnerGEN1, costGEN2, winnerGEN2
+print("--------------------------------  TEST 10   -------------------------")
+print(test10())
+
+##v_1 = np.array([[1,0,0,7,0],[0,4,0,0,0],[2,1,4,0,5],[0,0,6,0,0]])
+##v_2 = np.array([[0,0,5,0,3],[0,4,0,0,0],[0,0,5,7,0],[3,1,0,0,2]])
+##print(crossover_GEN2(v_1, v_2))
 
 ##REM = np.array([[1., 0., 1., 1., 1.],[0., 0., 0., 0., 0.],[0., 1., 1., 1., 1.],[1., 1., 0., 0., 0.]])
 ##sourrempol = [2,0,2,1]
